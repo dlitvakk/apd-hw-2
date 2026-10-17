@@ -12,12 +12,16 @@ Retry extension: same machinery with maximumAttempts; the retry loop lives insid
 
 ## Milestones
 
-- [ ] Validate configuration and all job IDs before starting work.
-- [ ] Schedule jobs within the concurrency limit and preserve input order.
-- [ ] Map success, ordinary errors, and cancellation outcomes.
-- [ ] Handle caller cancellation and never-started jobs.
-- [ ] Add at least six distinct student-authored tests and run `swift test`.
+- [x] Validate configuration and all job IDs before starting work.
+- [x] Schedule jobs within the concurrency limit and preserve input order.
+- [x] Map success, ordinary errors, and cancellation outcomes.
+- [x] Handle caller cancellation and never-started jobs.
+- [x] Add at least six distinct student-authored tests and run `swift test`.
 
 ## Risks and checks
 
-<!-- Record assumptions, edge cases, and how each risk will be tested. -->
+Active count exceeding the limit -> testConcurrencyLimitRespected (Probe actor).
+Wrong ordering -> gate-controlled out-of-order test.
+Workers started after cancellation -> cancellation test asserts only "a" started.
+Retry occupying extra slots -> by construction (loop inside one child task).
+Assumption: after cancellation, a failed attempt is not retried and is .cancelled.
